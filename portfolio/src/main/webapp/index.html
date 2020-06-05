@@ -8,16 +8,34 @@
   </head>
   <body>
     <div id="content">
-      <h1>Diego's Portfolio</h1>
-      <p>This is my portfolio.</p>
-      <p>Hi! I am a rising Junior at Columbia University studying Computer Science focusing on Theory and Algorithms. I am from Napa, CA and am currently quarantined at home with my parents and my cat Valentino and two pups Nala, and Louie.</p>
-      <img src="/images/pfp.jpg" alt="A picture of me!" style="width:216.75px;height:218.7px;">
-      <p>Click <a href="https://www.linkedin.com/in/prado-diego/" target="_blank">here</a> to add me on LinkedIn.</p>
-      <p>Click <a href="https://github.com/dprado981/" target="_blank">here</a> to check out my GitHub.</p>
-      <p>I love to bake! (cookies and pies are my favorite to do). During quarantine I've been making weekly granola batches for my family to enjoy. I've recently started to get more into the savory side of cooking and am trying to improve my cooking skills (especially since I'm starting to be a vegetarian). The two favorite dishes I've made recently is a veggie and tofu stir fry and ricotta stuffed shells baked in a Marinara sauce.</p>
-      <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <table width="100%">
+        <tr>
+          <td>
+            <h1 style="margin-top:0;">Diego's Portfolio</h1>
+            <p>My name is Diego Prado I am a rising Junior at Columbia University studying Computer Science focusing on 
+              Theory and Algorithms. I am from Napa, CA and am currently quarantined at home with my parents, my cat 
+              Valentino, and my two dogs Nala and Louie. Click <a href="pets.html">here</a> to see pictures of them.</p>
+            <p>Click <a href="https://www.linkedin.com/in/prado-diego/" target="_blank">here</a> to add me on LinkedIn.</p>
+            <p>Click <a href="https://github.com/dprado981/" target="_blank">here</a> to check out my GitHub.</p>
+          </td>
+          <td align="right">
+            <img src="/images/pfp.jpg" title="A picture of me!" style="width:216.75px;height:218.7px;">
+          </td>
+            </tr>
+      </table>
+      <h3>Fun Fact About Me!</h3>
+      <p>During quarantine I've been making weekly batches of granola for my family to enjoy on top of the pastries, 
+        cookies and cakes I've made. Baking has been a favorite pastime of mine for a long time but I've recently 
+        started to get more into the savory side of cooking. Two of the best dishes I've made recently are scallion 
+        pancakes and baked ricotta stuffed shells.
+      </p>
+      <p>Click the button below to get a random quote from a movie/TV show:</p>
+      <table>
+        <tr>
+          <td><button onclick="addRandomGreeting()">???</button></td>
+          <td><div id="greeting-container"></div></td>
+        </tr>
+      </table>
     </div>
   </body>
 </html>

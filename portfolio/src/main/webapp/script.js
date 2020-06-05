@@ -16,13 +16,35 @@
  * Adds a random greeting to the page.
  */
 function addRandomGreeting() {
-  const greetings =
-      ['Sunshine daisies butter mellow turn this stupid fat rat yellow!', 'My cabbages!!!', 'Scared, Potter?', 'Oh, Hi Mark.', 'Always Blue!'];
+  const greetings = [
+    {text: 'Scared Potter?', 
+      color: '#ad1cad'}, 
+    {text: 'My cabbages!!!', 
+      color: 'green'},
+    {text: 'Always Blue!', 
+      color: '#0505cc'},
+    {text: 'Oh, Hi Mark.',
+      color: '#d40909'}
+  ];
 
   // Pick a random greeting.
-  const greeting = greetings[Math.floor(Math.random() * greetings.length)];
+  greetingIndex = Math.floor(Math.random() * greetings.length)
+  const greeting = greetings[greetingIndex].text;
 
   // Add it to the page.
   const greetingContainer = document.getElementById('greeting-container');
+  greetingContainer.style.color = greetings[greetingIndex].color;
   greetingContainer.innerText = greeting;
+}
+
+function changePic(imageContainer) {
+  console.log(imageContainer.src);
+  const path = imageContainer.src;
+  const index = path.length-5;
+  if(path.charAt(index) == "1") {
+    imageContainer.src = path.substring(0, index) + "2" + path.substring(index+1);
+  } else {
+    imageContainer.src = path.substring(0, index) + "1" + path.substring(index+1);
+  } 
+  console.log(imageContainer.src);
 }
