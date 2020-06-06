@@ -1,5 +1,9 @@
 body {
-  background-color: #c5d1d0
+  background-color: #e3e2e6
+}
+
+table {
+  width: 100%
 }
 #content {
   margin-left: auto;
@@ -7,8 +11,21 @@ body {
   width: 650px;
 }
 
+#page-title {
+  margin-top: 0;
+}
+
 #greeting-container {
   margin-top: 0px;
+}
+
+#pfp {
+  height: 8.5%;
+}
+
+#top-right {
+  vertical-align: top;
+  text-align: right;
 }
 
 #pet-pics {
