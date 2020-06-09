@@ -38,7 +38,6 @@ function addRandomGreeting() {
 }
 
 function changePic(imageContainer) {
-  console.log(imageContainer.src);
   const path = imageContainer.src;
   const index = path.length-5;
   if(path.charAt(index) == "1") {
@@ -46,5 +45,4 @@ function changePic(imageContainer) {
   } else {
     imageContainer.src = path.substring(0, index) + "1" + path.substring(index+1);
   } 
-  console.log(imageContainer.src);
 }
