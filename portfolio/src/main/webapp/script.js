@@ -48,7 +48,19 @@ function changePic(imageContainer) {
 }
 
 function getMessage() {
-  fetch('/data').then((response) => response.text()).then((message) => {
-    document.getElementById('message-container').innerHTML = message;
+  fetch('/data').then((response) => response.json()).then((messages) => {    
+    // Convert message JSON array to HTML list and to page
+    const messageListElement = document.getElementById('message-container');
+    messageListElement.innerHTML = "";
+    for(var i = 0; i < messages.length; i++) {
+      messageListElement.appendChild(createListElement(messages[i]));
+    }
   });
+}
+
+/** Creates an <li> element containing text. */
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
 }
