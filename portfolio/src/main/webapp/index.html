@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body>
+  <body onload="getMessages()">
     <div id="content">
       <table>
         <tr>
@@ -36,12 +36,13 @@
           <td><div id="quote-container"></div></td>
         </tr>
       </table>
-      <table>
-        <tr>
-          <td><button onclick="getMessage()">Fetch Message</button></td>
-          <td><div id="message-container"></div></td>
-        </tr>
-      </table>
+      <form action="/data" method="POST">
+        <p>Comment:</p>
+        <input type="text" name="user-comment" placeholder="Add a comment!">
+        <input id="comment-button" type="submit" value="Comment"/>
+      </form>
+      </br>
+      <div id="message-container"></div></td>
     </div>
   </body>
 </html>

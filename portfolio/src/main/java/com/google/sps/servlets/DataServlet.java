@@ -27,12 +27,28 @@ import com.google.gson.Gson;
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> messages = new ArrayList<String>(
-    Arrays.asList("Hello", "World", "My name is Diego"));
+  ArrayList<String> messages = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
     response.setContentType("text/html;");
     response.getWriter().println((new Gson()).toJson(messages));
+  }
+
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+    
+    // Get the input from the form.
+    String userComment = request.getParameter("user-comment");
+    if (userComment.isEmpty()) {
+      response.setContentType("text/html");
+      response.getWriter().println("Please enter a message before submitting your comment.");
+      return;
+    }
+
+    messages.add(userComment);
+
+    // Redirect back to the HTML page.
+    response.sendRedirect("/index.html");
   }
 }

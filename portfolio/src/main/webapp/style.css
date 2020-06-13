@@ -30,5 +30,9 @@ table {
 }
 
 #pet-pics {
-  width: 100%
+  width: 100%;
+}
+
+#comment-button {
+  display: inline;
 }
