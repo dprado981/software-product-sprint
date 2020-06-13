@@ -13,10 +13,10 @@
 // limitations under the License.
 
 /**
- * Adds a random greeting to the page.
+ * Adds a random quote to the page.
  */
-function addRandomGreeting() {
-  const greetings = [
+function addRandomQuote() {
+  const quotes = [
     {text: 'Scared Potter?', 
       color: '#ad1cad'}, 
     {text: 'My cabbages!!!', 
@@ -27,14 +27,14 @@ function addRandomGreeting() {
       color: '#d40909'}
   ];
 
-  // Pick a random greeting.
-  greetingIndex = Math.floor(Math.random() * greetings.length)
-  const greeting = greetings[greetingIndex].text;
+  // Pick a random quote.
+  quoteIndex = Math.floor(Math.random() * quotes.length)
+  const quote = quotes[quoteIndex].text;
 
   // Add it to the page.
-  const greetingContainer = document.getElementById('greeting-container');
-  greetingContainer.style.color = greetings[greetingIndex].color;
-  greetingContainer.innerText = greeting;
+  const quoteContainer = document.getElementById('quote-container');
+  quoteContainer.style.color = quotes[quoteIndex].color;
+  quoteContainer.innerText = quote;
 }
 
 function changePic(imageContainer) {
@@ -45,4 +45,10 @@ function changePic(imageContainer) {
   } else {
     imageContainer.src = path.substring(0, index) + "1" + path.substring(index+1);
   } 
+}
+
+function getMessage() {
+  fetch('/data').then((response) => response.text()).then((message) => {
+    document.getElementById('message-container').innerHTML = message;
+  });
 }
