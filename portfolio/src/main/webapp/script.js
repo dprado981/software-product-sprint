@@ -51,7 +51,6 @@ function getMessages() {
   fetch('/data').then((response) => response.json()).then((messages) => {    
     // Convert message JSON array to HTML list and to page
     const messageListElement = document.getElementById('message-container');
-    messageListElement.innerHTML = "";
     for(var i = 0; i < messages.length; i++) {
       messageListElement.appendChild(createListElement(messages[i]));
     }
@@ -59,8 +58,10 @@ function getMessages() {
 }
 
 /** Creates an <li> element containing text. */
-function createListElement(text) {
+function createListElement(comment) {
   const liElement = document.createElement('li');
-  liElement.innerText = text;
+  liElement.setAttribute("id", "comment");
+  const date = new Date(comment.timestamp);
+  liElement.innerText = comment.userComment + " was posted at " + date.toString();
   return liElement;
 }

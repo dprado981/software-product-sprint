@@ -22,17 +22,36 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.sps.data.Comment;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> messages = new ArrayList<String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println((new Gson()).toJson(messages));
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+    ArrayList<Comment> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      long id = entity.getKey().getId();
+      String userComment = (String) entity.getProperty("userComment");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+      Comment comment = new Comment(id, userComment, timestamp);
+      comments.add(comment);
+    }
+
+    response.setContentType("application/json;");
+    response.getWriter().println((new Gson()).toJson(comments));
   }
 
   @Override
@@ -40,13 +59,19 @@ public class DataServlet extends HttpServlet {
     
     // Get the input from the form.
     String userComment = request.getParameter("user-comment");
+    long timestamp = System.currentTimeMillis();
     if (userComment.isEmpty()) {
       response.setContentType("text/html");
       response.getWriter().println("Please enter a message before submitting your comment.");
       return;
     }
 
-    messages.add(userComment);
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("userComment", userComment);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
 
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
