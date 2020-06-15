@@ -43,10 +43,11 @@ public class DataServlet extends HttpServlet {
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
       long id = entity.getKey().getId();
+      String username = (String) entity.getProperty("username");
       String userComment = (String) entity.getProperty("userComment");
       long timestamp = (long) entity.getProperty("timestamp");
 
-      Comment comment = new Comment(id, userComment, timestamp);
+      Comment comment = new Comment(id, username, userComment, timestamp);
       comments.add(comment);
     }
 
@@ -58,15 +59,12 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Get the input from the form.
+    String username = request.getParameter("user-name");
     String userComment = request.getParameter("user-comment");
     long timestamp = System.currentTimeMillis();
-    if (userComment.isEmpty()) {
-      response.setContentType("text/html");
-      response.getWriter().println("Please enter a message before submitting your comment.");
-      return;
-    }
 
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", username);
     commentEntity.setProperty("userComment", userComment);
     commentEntity.setProperty("timestamp", timestamp);
 

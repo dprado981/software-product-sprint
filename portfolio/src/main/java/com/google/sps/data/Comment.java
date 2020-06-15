@@ -3,12 +3,14 @@ package com.google.sps.data;
 public final class Comment {
   
   private final long id;
-  private final String userComment;
+  private final String username;
+  private final String text;
   private final long timestamp;
 
-  public Comment(long id, String userComment, long timestamp) {
+  public Comment(long id, String username, String text, long timestamp) {
     this.id = id;
-    this.userComment = userComment;
+    this.username = username;
+    this.text = text;
     this.timestamp = timestamp;
   }
 

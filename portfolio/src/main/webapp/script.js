@@ -47,21 +47,61 @@ function changePic(imageContainer) {
   } 
 }
 
-function getMessages() {
-  fetch('/data').then((response) => response.json()).then((messages) => {    
+function getComments() {
+  fetch('/data').then((response) => response.json()).then((comments) => {    
     // Convert message JSON array to HTML list and to page
     const messageListElement = document.getElementById('message-container');
-    for(var i = 0; i < messages.length; i++) {
-      messageListElement.appendChild(createListElement(messages[i]));
+    for(var i = 0; i < comments.length; i++) {
+      messageListElement.appendChild(createListElement(comments[i]));
     }
   });
 }
 
 /** Creates an <li> element containing text. */
 function createListElement(comment) {
-  const liElement = document.createElement('li');
-  liElement.setAttribute("id", "comment");
-  const date = new Date(comment.timestamp);
-  liElement.innerText = comment.userComment + " was posted at " + date.toString();
-  return liElement;
+  const commentElement = document.createElement('div');
+  commentElement.setAttribute("id", "comment");
+  const timeAgo = getTimeAgo(Math.abs((new Date()) - (new Date(comment.timestamp))));
+  
+  const usernameElement = document.createElement('div');
+  usernameElement.setAttribute("id", "comment-username");
+  usernameElement.innerText = comment.username;
+
+  const timeAgoElement = document.createElement('div');
+  timeAgoElement.setAttribute("id", "comment-timeAgo");
+  timeAgoElement.innerText = timeAgo;
+
+  
+  const textElement = document.createElement('div');
+  textElement.setAttribute("id", "comment-text");
+  textElement.innerText = comment.text;
+
+  commentElement.appendChild(usernameElement);
+  commentElement.appendChild(timeAgoElement);
+  commentElement.appendChild(textElement);
+  
+  return commentElement;
+}
+
+function getTimeAgo(diffInMilli) {
+  if (diffInMilli < 60000) {
+    return "Less than 1 minute ago";
+  }
+  const minutes = diffInMilli / 60000;
+  if (minutes < 60) {
+    return Math.floor(minutes) + " minutes ago";
+  }
+  const hours = minutes / 60;
+  if (hours < 24) {
+    return Math.floor(hours) + " hours ago";
+  }
+  const days = hours / 24;
+  if (days < 31) {
+    return Math.floor(days) + " days ago";
+  }
+  const months = days / 30;
+  if (months < 12) {
+    return Math.floor(months) + " months ago";
+  }
+  return Math.floor(months / 12) + " years ago";
 }
