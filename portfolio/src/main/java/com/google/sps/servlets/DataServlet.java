@@ -41,6 +41,7 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
+    // Retrieve comment data from datastore and add to arraylist
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
       String username = (String) entity.getProperty("username");
@@ -51,6 +52,7 @@ public class DataServlet extends HttpServlet {
       comments.add(comment);
     }
 
+    // Send ArrayList of Comments to client to display
     response.setContentType("application/json;");
     response.getWriter().println((new Gson()).toJson(comments));
   }

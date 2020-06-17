@@ -83,6 +83,10 @@ function createCommentElement(comment) {
   return commentElement;
 }
 
+/** returns a phrase describing the difference  
+*   from the current time to when a comment was 
+*   posted, in milliseconds, as a string
+*/
 function getTimeAgo(diffInMilli) {
   if (diffInMilli < 60000) {
     return "Less than 1 minute ago";
