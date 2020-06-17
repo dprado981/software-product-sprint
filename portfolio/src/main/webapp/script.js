@@ -47,7 +47,7 @@ function changePic(imageContainer) {
   } 
 }
 
-function getMessage() {
+function getMessages() {
   fetch('/data').then((response) => response.json()).then((messages) => {    
     // Convert message JSON array to HTML list and to page
     const messageListElement = document.getElementById('message-container');
