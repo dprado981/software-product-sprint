@@ -42,7 +42,7 @@ div.comment div {
   opacity: 1;
 }
 
-#comment {
+.comment {
   background-color: #ffffff;
   width: 50%;
   margin-bottom: 5px;
@@ -51,19 +51,19 @@ div.comment div {
   padding-bottom: 5px;
 }
 
-#comment-username {
+.comment-username {
   display: inline;
   font-weight: bold;
 }
 
-#comment-timeAgo {
+.comment-timeAgo {
   display: inline;
   margin-left: 8px;
   font-size: 12px;
   color: #8b8787;
 }
 
-#comment-text {
+.comment-text {
   margin-top: 3px;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
