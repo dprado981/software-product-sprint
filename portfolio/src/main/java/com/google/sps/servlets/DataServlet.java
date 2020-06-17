@@ -41,14 +41,18 @@ public class DataServlet extends HttpServlet {
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
 
+    // Retrieve comment data from datastore and add to arraylist
     ArrayList<Comment> comments = new ArrayList<>();
     for (Entity entity : results.asIterable()) {
+      String username = (String) entity.getProperty("username");
       String userComment = (String) entity.getProperty("userComment");
       long timestamp = (long) entity.getProperty("timestamp");
-      Comment comment = new Comment(userComment, timestamp);
+
+      Comment comment = new Comment(username, userComment, timestamp);
       comments.add(comment);
     }
 
+    // Send ArrayList of Comments to client to display
     response.setContentType("application/json;");
     response.getWriter().println((new Gson()).toJson(comments));
   }
@@ -57,15 +61,12 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Get the input from the form.
+    String username = request.getParameter("user-name");
     String userComment = request.getParameter("user-comment");
     long timestamp = System.currentTimeMillis();
-    if (userComment.isEmpty()) {
-      response.setContentType("text/html");
-      response.getWriter().println("Please enter a message before submitting your comment.");
-      return;
-    }
 
     Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", username);
     commentEntity.setProperty("userComment", userComment);
     commentEntity.setProperty("timestamp", timestamp);
 
