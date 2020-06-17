@@ -57,10 +57,10 @@ function getMessages() {
   });
 }
 
-/** Creates an <li> element containing text. */
+/** Creates an <li> element containing a comment. */
 function createListElement(comment) {
   const liElement = document.createElement('li');
-  liElement.setAttribute("id", "comment");
+  liElement.setAttribute("class", "comment");
   const date = new Date(comment.timestamp);
   liElement.innerText = comment.userComment + " was posted at " + date.toString();
   return liElement;
