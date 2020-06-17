@@ -49,31 +49,31 @@ function changePic(imageContainer) {
 
 function getComments() {
   fetch('/data').then((response) => response.json()).then((comments) => {    
-    // Convert message JSON array to HTML list and to page
-    const messageListElement = document.getElementById('message-container');
+    // Convert message JSON array to HTML elements then add to page
+    const commentListElement = document.getElementById('message-container');
     for(var i = 0; i < comments.length; i++) {
-      messageListElement.appendChild(createListElement(comments[i]));
+      commentListElement.appendChild(createCommentElement(comments[i]));
     }
   });
 }
 
-/** Creates an <li> element containing text. */
-function createListElement(comment) {
+/** Creates a <div> element containing a comment. */
+function createCommentElement(comment) {
   const commentElement = document.createElement('div');
-  commentElement.setAttribute("id", "comment");
+  commentElement.setAttribute("class", "comment");
   const timeAgo = getTimeAgo(Math.abs((new Date()) - (new Date(comment.timestamp))));
   
   const usernameElement = document.createElement('div');
-  usernameElement.setAttribute("id", "comment-username");
+  usernameElement.setAttribute("class", "comment-username");
   usernameElement.innerText = comment.username;
 
   const timeAgoElement = document.createElement('div');
-  timeAgoElement.setAttribute("id", "comment-timeAgo");
+  timeAgoElement.setAttribute("class", "comment-timeAgo");
   timeAgoElement.innerText = timeAgo;
 
   
   const textElement = document.createElement('div');
-  textElement.setAttribute("id", "comment-text");
+  textElement.setAttribute("class", "comment-text");
   textElement.innerText = comment.text;
 
   commentElement.appendChild(usernameElement);
