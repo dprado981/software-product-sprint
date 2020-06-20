@@ -19,9 +19,10 @@ public class LogInServlet extends HttpServlet {
     UserService userService = UserServiceFactory.getUserService();
     boolean loggedIn = userService.isUserLoggedIn();
     
+    // send logout URL if user is logged in, otherwise send login URL
+    String URL = loggedIn ? userService.createLogoutURL("/index.html") : userService.createLoginURL("/index.html");
     response.setContentType("application/json;");
-    response.getWriter().println("{loggedIn: " + Boolean.toString(loggedIn) + "}");
-    return;
+    response.getWriter().println((new Gson()).toJson(URL));
   }
 
 }

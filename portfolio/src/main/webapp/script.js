@@ -47,14 +47,44 @@ function changePic(imageContainer) {
   } 
 }
 
+/** Allows user to log in and out and create comments */
 function getComments() {
-  fetch('/data').then((response) => response.json()).then((comments) => {    
-    // Convert message JSON array to HTML elements then add to page
-    const commentListElement = document.getElementById('message-container');
-    for(var i = 0; i < comments.length; i++) {
-      commentListElement.appendChild(createCommentElement(comments[i]));
+  fetch('/login').then((response) => response.json()).then((URL) => {
+    
+    const commentBox  = document.getElementById('comment-box');
+
+    // If the user is logged in, add button to log out
+    // then add ability to make comments, then load existing comments
+    if (URL.includes("logout")) {
+        commentBox.innerHTML =
+        "<a href=\"" + URL + "\"><button>Log Out</button></a>\n"+
+        "<form action=\"/data\" method=\"POST\">\n"+
+        "  <p>Leave a comment down below!</p>\n"+
+        "  <input type=\"text\" name=\"user-name\" placeholder=\"Enter your username\" required >\n"+
+        "  <br/>\n"+
+        "  <input type=\"text\" name=\"user-comment\" placeholder=\"Add a comment!\" size=\"50\" required>\n"+
+        "  <input id=\"comment-button\" type=\"submit\" value=\"Comment\"/>\n"+
+        "</form>\n"+
+        "<br/>\n"+
+        "<div id=\"message-container\"></div>\n";
+      
+      fetch('/data').then((response) => response.json()).then((comments) => {    
+        // Convert message JSON array to HTML elements then add to page
+        const commentListElement = document.getElementById('message-container');
+        for(var i = 0; i < comments.length; i++) {
+          commentListElement.appendChild(createCommentElement(comments[i]));
+        }
+      });
+
+    // Make user log in to view comments
+    } else {
+      commentBox.innerHTML =
+      "<a href=\"" + URL + "\">\n"+
+      "  <button>Log in to view and make comments</button>\n"+
+      "</a>\n";
     }
   });
+  
 }
 
 /** Creates a <div> element containing a comment. */
