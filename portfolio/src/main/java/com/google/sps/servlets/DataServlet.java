@@ -22,31 +22,56 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
 import com.google.gson.Gson;
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.sps.data.Comment;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
-  ArrayList<String> messages = new ArrayList<String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println((new Gson()).toJson(messages));
+    
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
+    PreparedQuery results = datastore.prepare(query);
+
+    // Retrieve comment data from datastore and add to arraylist
+    ArrayList<Comment> comments = new ArrayList<>();
+    for (Entity entity : results.asIterable()) {
+      String username = (String) entity.getProperty("username");
+      String userComment = (String) entity.getProperty("userComment");
+      long timestamp = (long) entity.getProperty("timestamp");
+
+      Comment comment = new Comment(username, userComment, timestamp);
+      comments.add(comment);
+    }
+
+    // Send ArrayList of Comments to client to display
+    response.setContentType("application/json;");
+    response.getWriter().println((new Gson()).toJson(comments));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Get the input from the form.
+    String username = request.getParameter("user-name");
     String userComment = request.getParameter("user-comment");
-    if (userComment.isEmpty()) {
-      response.setContentType("text/html");
-      response.getWriter().println("Please enter a message before submitting your comment.");
-      return;
-    }
+    long timestamp = System.currentTimeMillis();
 
-    messages.add(userComment);
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("username", username);
+    commentEntity.setProperty("userComment", userComment);
+    commentEntity.setProperty("timestamp", timestamp);
+
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
 
     // Redirect back to the HTML page.
     response.sendRedirect("/index.html");
