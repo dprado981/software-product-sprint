@@ -61,9 +61,11 @@ public class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     
     // Get the input from the form.
-    String username = request.getParameter("user-name");
     String userComment = request.getParameter("user-comment");
     long timestamp = System.currentTimeMillis();
+
+    // Get email address from login status
+    String username = LogInServlet.getCurrentEmail();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);
