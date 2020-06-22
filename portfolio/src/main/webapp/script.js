@@ -49,23 +49,21 @@ function changePic(imageContainer) {
 
 /** Allows user to log in and out and create comments */
 function getComments() {
-  fetch('/login').then((response) => response.json()).then((URL) => {
+  fetch('/login').then((response) => response.json()).then((Login) => {
     
     const commentBox  = document.getElementById('comment-box');
 
     // If the user is logged in, add button to log out
     // then add ability to make comments, then load existing comments
-    if (URL.includes("logout")) {
+    if (Login.emailAddress != null) {
         commentBox.innerHTML =
-        "<a href=\"" + URL + "\"><button>Log Out</button></a>\n"+
+        "<a href=\"" + Login.URL + "\"><button>Log Out</button></a>\n"+
         "<form action=\"/data\" method=\"POST\">\n"+
-        "  <p>Leave a comment down below!</p>\n"+
-        "  <input type=\"text\" name=\"user-name\" placeholder=\"Enter your username\" required >\n"+
-        "  <br/>\n"+
+        "  <p>Hi, " + Login.emailAddress + "! Leave a comment down below!</p>\n"+
         "  <input type=\"text\" name=\"user-comment\" placeholder=\"Add a comment!\" size=\"50\" required>\n"+
         "  <input id=\"comment-button\" type=\"submit\" value=\"Comment\"/>\n"+
         "</form>\n"+
-        "<br/>\n"+
+        "<br>\n"+
         "<div id=\"message-container\"></div>\n";
       
       fetch('/data').then((response) => response.json()).then((comments) => {    
@@ -79,7 +77,7 @@ function getComments() {
     // Make user log in to view comments
     } else {
       commentBox.innerHTML =
-      "<a href=\"" + URL + "\">\n"+
+      "<a href=\"" + Login.URL + "\">\n"+
       "  <button>Log in to view and make comments</button>\n"+
       "</a>\n";
     }
@@ -113,7 +111,7 @@ function createCommentElement(comment) {
   return commentElement;
 }
 
-/** returns a phrase describing the difference  
+/** Returns a phrase describing the difference  
 *   from the current time to when a comment was 
 *   posted, in milliseconds, as a string
 */
