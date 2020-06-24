@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random quote to the page.
- */
+/** Adds a random quote to the page. */
 function addRandomQuote() {
   const quotes = [
     {text: 'Scared Potter?', 
@@ -47,19 +45,19 @@ function changePic(imageContainer) {
   } 
 }
 
-/** Allows user to log in and out and create comments */
+/** Allows user to log in and out and create comments. */
 function getComments() {
-  fetch('/login').then((response) => response.json()).then((Login) => {
+  fetch('/login').then((response) => response.json()).then((login) => {
     
     const commentBox  = document.getElementById('comment-box');
 
     // If the user is logged in, add button to log out
     // then add ability to make comments, then load existing comments
-    if (Login.emailAddress != null) {
+    if (login.emailAddress != null) {
         commentBox.innerHTML =
-        "<a href=\"" + Login.URL + "\"><button>Log Out</button></a>\n"+
+        "<a href=\"" + login.url + "\"><button>Log Out</button></a>\n"+
         "<form action=\"/data\" method=\"POST\">\n"+
-        "  <p>Hi, " + Login.emailAddress + "! Leave a comment down below!</p>\n"+
+        "  <p>Hi, " + login.emailAddress + "! Leave a comment down below!</p>\n"+
         "  <input type=\"text\" name=\"user-comment\" placeholder=\"Add a comment!\" size=\"50\" required>\n"+
         "  <input id=\"comment-button\" type=\"submit\" value=\"Comment\"/>\n"+
         "</form>\n"+
@@ -77,7 +75,7 @@ function getComments() {
     // Make user log in to view comments
     } else {
       commentBox.innerHTML =
-      "<a href=\"" + Login.URL + "\">\n"+
+      "<a href=\"" + login.url + "\">\n"+
       "  <button>Log in to view and make comments</button>\n"+
       "</a>\n";
     }
@@ -113,7 +111,7 @@ function createCommentElement(comment) {
 
 /** Returns a phrase describing the difference  
 *   from the current time to when a comment was 
-*   posted, in milliseconds, as a string
+*   posted, in milliseconds, as a string.
 */
 function getTimeAgo(diffInMilli) {
   if (diffInMilli < 60000) {
