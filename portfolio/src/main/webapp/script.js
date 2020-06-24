@@ -48,21 +48,14 @@ function changePic(imageContainer) {
 /** Allows user to log in and out and create comments. */
 function getComments() {
   fetch('/login').then((response) => response.json()).then((login) => {
-    
-    const commentBox  = document.getElementById('comment-box');
-
-    // If the user is logged in, add button to log out
-    // then add ability to make comments, then load existing comments
-    if (login.emailAddress != null) {
-        commentBox.innerHTML =
-        "<a href=\"" + login.url + "\"><button>Log Out</button></a>\n"+
-        "<form action=\"/data\" method=\"POST\">\n"+
-        "  <p>Hi, " + login.emailAddress + "! Leave a comment down below!</p>\n"+
-        "  <input type=\"text\" name=\"user-comment\" placeholder=\"Add a comment!\" size=\"50\" required>\n"+
-        "  <input id=\"comment-button\" type=\"submit\" value=\"Comment\"/>\n"+
-        "</form>\n"+
-        "<br>\n"+
-        "<div id=\"message-container\"></div>\n";
+    // Only allow user to see/make comments if they are logged in
+    if (login.emailAddress == null) {
+      document.getElementById('logged-in').style.display = "none";
+      document.getElementById('log-in-button').href = login.url;   
+    } else { 
+      document.getElementById('logged-out').style.display = "none";
+      document.getElementById('log-out-button').href = login.url;
+      document.getElementById('greeting').innerText = "Hi, " + login.emailAddress + "! Leave a comment down below!";
       
       fetch('/data').then((response) => response.json()).then((comments) => {    
         // Convert message JSON array to HTML elements then add to page
@@ -71,13 +64,6 @@ function getComments() {
           commentListElement.appendChild(createCommentElement(comments[i]));
         }
       });
-
-    // Make user log in to view comments
-    } else {
-      commentBox.innerHTML =
-      "<a href=\"" + login.url + "\">\n"+
-      "  <button>Log in to view and make comments</button>\n"+
-      "</a>\n";
     }
   });
   
