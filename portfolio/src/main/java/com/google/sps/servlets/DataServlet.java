@@ -28,15 +28,21 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.sps.data.Comment;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
+/** Servlet that manages the retreival and sending of comments from the Datastore to the client.*/
 @WebServlet("/data")
 public class DataServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
+    // Only allow user to view comments if they are signed in
+    if (!UserServiceFactory.getUserService().isUserLoggedIn()) {
+      return;
+    }
+
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Query query = new Query("Comment").addSort("timestamp", SortDirection.DESCENDING);
     PreparedQuery results = datastore.prepare(query);
@@ -59,11 +65,17 @@ public class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    
+    // Only allow user to add a comment if they are signed in 
+    if (!UserServiceFactory.getUserService().isUserLoggedIn()) {
+      return;
+    }
+
     // Get the input from the form.
-    String username = request.getParameter("user-name");
     String userComment = request.getParameter("user-comment");
     long timestamp = System.currentTimeMillis();
+
+    // Get email address from current user
+    String username = UserServiceFactory.getUserService().getCurrentUser().getEmail();
 
     Entity commentEntity = new Entity("Comment");
     commentEntity.setProperty("username", username);

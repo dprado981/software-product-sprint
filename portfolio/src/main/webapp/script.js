@@ -12,9 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/**
- * Adds a random quote to the page.
- */
+/** Adds a random quote to the page. */
 function addRandomQuote() {
   const quotes = [
     {text: 'Scared Potter?', 
@@ -47,14 +45,28 @@ function changePic(imageContainer) {
   } 
 }
 
+/** Allows user to log in and out and create comments. */
 function getComments() {
-  fetch('/data').then((response) => response.json()).then((comments) => {    
-    // Convert message JSON array to HTML elements then add to page
-    const commentListElement = document.getElementById('message-container');
-    for(var i = 0; i < comments.length; i++) {
-      commentListElement.appendChild(createCommentElement(comments[i]));
+  fetch('/login').then((response) => response.json()).then((login) => {
+    // Only allow user to see/make comments if they are logged in
+    if (login.emailAddress == null) {
+      document.getElementById('logged-in').style.display = "none";
+      document.getElementById('log-in-button').href = login.url;   
+    } else { 
+      document.getElementById('logged-out').style.display = "none";
+      document.getElementById('log-out-button').href = login.url;
+      document.getElementById('greeting').innerText = "Hi, " + login.emailAddress + "! Leave a comment down below!";
+      
+      fetch('/data').then((response) => response.json()).then((comments) => {    
+        // Convert message JSON array to HTML elements then add to page
+        const commentListElement = document.getElementById('message-container');
+        for(var i = 0; i < comments.length; i++) {
+          commentListElement.appendChild(createCommentElement(comments[i]));
+        }
+      });
     }
   });
+  
 }
 
 /** Creates a <div> element containing a comment. */
@@ -83,9 +95,9 @@ function createCommentElement(comment) {
   return commentElement;
 }
 
-/** returns a phrase describing the difference  
+/** Returns a phrase describing the difference  
 *   from the current time to when a comment was 
-*   posted, in milliseconds, as a string
+*   posted, in milliseconds, as a string.
 */
 function getTimeAgo(diffInMilli) {
   if (diffInMilli < 60000) {

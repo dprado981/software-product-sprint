@@ -21,7 +21,7 @@
           <td id="top-right">
             <img id="pfp" src="/images/pfp.jpg" title="A picture of me!">
           </td>
-            </tr>
+        </tr>
       </table>
       <h3>Fun Fact About Me!</h3>
       <p>During quarantine I've been making weekly batches of granola for my family to enjoy on top of the pastries, 
@@ -37,15 +37,23 @@
         </tr>
       </table>
       <hr>
-      <form action="/data" method="POST">
-        <p>Leave a comment down below!</p>
-        <input type="text" name="user-name" placeholder="Enter your username" required >
-        </br>
-        <input type="text" name="user-comment" placeholder="Add a comment!" size="50" required>
-        <input id="comment-button" type="submit" value="Comment"/>
-      </form>
-      </br>
-      <div id="message-container"></div></td>
+      <div id="comment-box">
+        <div id="logged-in">
+          <a id="log-out-button"><button>Log Out</button></a>
+          <form action="/data" method="POST">
+            <p id="greeting">Hi!</p>
+            <input type="text" name="user-comment" placeholder="Add a comment!" size="50" required>
+            <input id="comment-button" type="submit" value="Comment"/>
+          </form>
+          <br>
+          <div id="message-container"></div>
+        </div>
+        <div id="logged-out">
+          <a id="log-in-button">
+            <button>Log in to view and make comments</button>
+          </a>
+        </div>
+      </div>
     </div>
   </body>
 </html>
