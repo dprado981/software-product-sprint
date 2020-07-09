@@ -20,6 +20,9 @@ import java.util.ArrayList;
 
 public final class FindMeetingQuery {
 
+  private static final boolean INCLUSIVE = true;
+  private static final boolean EXCLUSIVE = false;
+
   public Collection<TimeRange> query(Collection<Event> events, MeetingRequest request) {
     // If a request lasts for longer than the day, no times work
     if (request.getDuration() > TimeRange.WHOLE_DAY.duration()) {
@@ -42,11 +45,12 @@ public final class FindMeetingQuery {
   private ArrayList<TimeRange> getRelevantTimes(Collection<Event> events, Collection<String> requestingAttendees) {
     ArrayList<TimeRange> relevantTimes = new ArrayList<>();
     for (Event event : events) {
-      Collection<String> eventAtendees = event.getAttendees();
+      Collection<String> eventAttendees = event.getAttendees();
       // Add to relevantTimes if a requesting attendee is in the event
       for (String requestingAttendee : requestingAttendees) {
-        if (eventAtendees.contains(requestingAttendee)) {
+        if (eventAttendees.contains(requestingAttendee)) {
           relevantTimes.add(event.getWhen());
+          break;
         }
       }
     }
@@ -70,7 +74,7 @@ public final class FindMeetingQuery {
           // Make new TimeRange that spans both TimeRanges
           int newStart = Math.min(oldEventTime.start(), newEventTime.start());
           int newEnd = Math.max(oldEventTime.end(), newEventTime.end());
-          TimeRange newRange = TimeRange.fromStartEnd(newStart, newEnd, false);
+          TimeRange newRange = TimeRange.fromStartEnd(newStart, newEnd, EXCLUSIVE);
 
           // Replace old TimeRange with new block TimeRange
           blockTimes.set(i, newRange);
@@ -96,10 +100,10 @@ public final class FindMeetingQuery {
     for (TimeRange blockTime : blockTimes) {
       int start = lastEndTime;
       int end = blockTime.start();
-      invertedTimeRanges.add(TimeRange.fromStartEnd(start, end, false));
+      invertedTimeRanges.add(TimeRange.fromStartEnd(start, end, EXCLUSIVE));
       lastEndTime = end + blockTime.duration();
     }
-    invertedTimeRanges.add(TimeRange.fromStartEnd(lastEndTime, TimeRange.END_OF_DAY, true));
+    invertedTimeRanges.add(TimeRange.fromStartEnd(lastEndTime, TimeRange.END_OF_DAY, INCLUSIVE));
     return invertedTimeRanges;
   }
 
